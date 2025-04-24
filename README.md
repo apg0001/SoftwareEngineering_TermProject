@@ -16,6 +16,7 @@
 6. **로그아웃**: 사용자는 언제든지 로그아웃을 할 수 있습니다.
 
 ## 프로젝트 디렉토리 구조
+```
 restaurant-reservation/
 ├── backend/                  # Flask 백엔드
 │   ├── app.py                # Flask 앱 메인 파일 (기능: 회원가입, 로그인, 예약, 취소)
@@ -40,6 +41,7 @@ restaurant-reservation/
 │   ├── package.json          # React 프로젝트 메타데이터 및 의존성 관리
 │   ├── README.md             # 프로젝트 설명 파일
 └── .gitignore                # Git ignore 파일 (백엔드와 프론트엔드 공통)
+```
 
 ## API 설명 및 파라미터
 
