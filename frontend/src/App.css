@@ -1,0 +1,129 @@
+기본 스타일
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* 헤더 스타일 - 최상단 고정 */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  background-color: #f4f4f4;
+  text-align: center;
+  z-index: 100; /* 헤더가 최상단에 위치하도록 설정 */
+}
+
+header h1 {
+  margin: 0;
+}
+
+header a {
+  text-decoration: none;
+  color: black;
+  font-size: 24px;
+  margin-left: 10px;
+}
+
+/* 로그인 페이지 스타일 */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #ffe0e0;
+}
+
+.login-container {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 300px;
+}
+
+.login-container h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #ff6699;
+}
+
+.login-form .form-group {
+  margin-bottom: 15px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ff6699;
+  border-radius: 5px;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #ff6699;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.login-form button:hover {
+  background-color: #ff3385;
+}
+
+/* 에러 메시지 */
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+/* 메인 페이지 스타일 - 모든 요소 중앙 정렬 */
+.main-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  height: 100vh; /* 화면을 꽉 채우기 위해 높이를 100%로 설정 */
+  background-color: #1a1a1a;
+  padding-top: 80px; /* 헤더와 겹치지 않도록 공간 확보 */
+}
+
+.main-page h2 {
+  color: white;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.main-page button {
+  padding: 10px 20px;
+  background-color: #ff6699;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.main-page button:hover {
+  background-color: #ff3385;
+}
+
+/* 링크 스타일 */
+a {
+  text-decoration: none;
+  color: white;
+}
+
+a:hover {
+  color: #ff3385;
+}
