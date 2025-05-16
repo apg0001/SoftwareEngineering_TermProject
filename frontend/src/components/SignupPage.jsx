@@ -1,86 +1,114 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { signupUser } from '../services/api';
 
-const API_URL = "http://127.0.0.1:5000/api";
-
-function SignupPage() {
+const SignupPage = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
+    email: '',
+    password: '',
+    confirmPassword: '',
+    name: '',
+    phoneNumber: ''
   });
-
-  const [errorMessage, setErrorMessage] = useState(""); // 에러 메시지를 위한 상태
-  const [successMessage, setSuccessMessage] = useState(""); // 성공 메시지를 위한 상태
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      // 회원가입 API 호출
-      const response = await axios.post(`${API_URL}/signup`, formData);
+    
+    if (formData.password !== formData.confirmPassword) {
+      setError('비밀번호가 일치하지 않습니다.');
+      return;
+    }
 
-      if (response.status === 201) {
-        setSuccessMessage("Signup successful! Please log in.");
-        setErrorMessage(""); // 에러 메시지 초기화
-        setFormData({ name: "", email: "", password: "" }); // 폼 데이터 초기화
-      }
+    try {
+      await signupUser(formData);
+      navigate('/login');
     } catch (err) {
-      setErrorMessage("Error during signup. Please try again.");
-      setSuccessMessage(""); // 성공 메시지 초기화
+      setError('회원가입 중 오류가 발생했습니다.');
       console.error(err);
     }
   };
 
   return (
-    <div className="login-page">
-      <div className="signup-container">
+    <div className="auth-page">
+      <div className="auth-container">
         <h2>회원가입</h2>
-
-        {/* 성공 및 에러 메시지 표시 */}
-        {successMessage && (
-          <div style={{ color: "green" }}>{successMessage}</div>
-        )}
-        {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
-
-        <form onSubmit={handleSubmit} className="signup-form">
+        {error && <div className="alert alert-error">{error}</div>}
+        
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
-          <label htmlFor="email">이름</label>
-            <input
-              type="text"
-              placeholder="Name"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-            />
-          </div>
-          <div className="form-group">
-          <label htmlFor="email">이메일</label>
+            <label htmlFor="email">이메일</label>
             <input
               type="email"
-              placeholder="Email"
+              id="email"
+              placeholder="이메일을 입력하세요"
               value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              required
             />
           </div>
+
           <div className="form-group">
-          <label htmlFor="email">비밀번호</label>
+            <label htmlFor="name">이름</label>
+            <input
+              type="text"
+              id="name"
+              placeholder="이름을 입력하세요"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="phoneNumber">전화번호</label>
+            <input
+              type="tel"
+              id="phoneNumber"
+              placeholder="전화번호를 입력하세요"
+              value={formData.phoneNumber}
+              onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">비밀번호</label>
             <input
               type="password"
-              placeholder="Password"
+              id="password"
+              placeholder="비밀번호를 입력하세요"
               value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              required
             />
           </div>
-          <button type="submit">회원가입</button>
+
+          <div className="form-group">
+            <label htmlFor="confirmPassword">비밀번호 확인</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="비밀번호를 다시 입력하세요"
+              value={formData.confirmPassword}
+              onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+              required
+            />
+          </div>
+
+          <button type="submit" className="btn btn-primary">회원가입</button>
+          
+          <div style={{ textAlign: 'center', marginTop: 'var(--spacing-lg)' }}>
+            <p>이미 계정이 있으신가요?</p>
+            <a href="/login" className="btn btn-secondary" style={{ marginTop: 'var(--spacing-sm)' }}>
+              로그인하기
+            </a>
+          </div>
         </form>
       </div>
     </div>
   );
-}
+};
 
 export default SignupPage;

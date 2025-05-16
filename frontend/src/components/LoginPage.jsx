@@ -18,24 +18,25 @@ const LoginPage = ({ setUser }) => {
       setUser({ email: formData.email, name: user.data.user.name, id: user.data.user.id });  // 로그인 성공 시 사용자 정보 저장
       navigate('/');  // 로그인 후 메인 페이지로 이동
     } catch (err) {
-      setError('Invalid credentials');  // 로그인 실패 시 에러 처리
+      setError('이메일 또는 비밀번호가 올바르지 않습니다.');  // 로그인 실패 시 에러 처리
       console.error(err);  // 에러 출력
     }
   };
 
   return (
-    <div className="login-page">
-      <div className="login-container">
+    <div className="auth-page">
+      <div className="auth-container">
         <h2>로그인</h2>
-        <form onSubmit={handleSubmit} className="login-form">
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="email">이메일</label>
             <input
               type="email"
               id="email"
-              placeholder="이메일"
+              placeholder="이메일을 입력하세요"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              required
             />
           </div>
           <div className="form-group">
@@ -43,13 +44,19 @@ const LoginPage = ({ setUser }) => {
             <input
               type="password"
               id="password"
-              placeholder="비밀번호"
+              placeholder="비밀번호를 입력하세요"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              required
             />
           </div>
           {error && <div className="error-message">{error}</div>} {/* 로그인 실패 시 에러 메시지 */}
-          <button type="submit" className="login-btn">로그인</button>
+          <button type="submit" className="btn btn-primary">로그인</button>
+          <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+            <a href="/signup" className="btn btn-secondary" style={{ textDecoration: 'none' }}>
+              회원가입
+            </a>
+          </div>
         </form>
       </div>
     </div>

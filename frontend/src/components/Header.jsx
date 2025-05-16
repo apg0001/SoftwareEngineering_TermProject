@@ -1,45 +1,52 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-function Header({ user, handleLogout}) {
+const Header = ({ user, handleLogout }) => {
+  const navigate = useNavigate();
+
   return (
-    <div
-      style={{
-        padding: "10px",
-        backgroundColor: "#f4f4f4",
-        textAlign: "center",
-      }}
-    >
-      <h1>
-        <Link to="/" style={{ color: "black", textDecoration: "none" }}>
-          기가차니의 심야식당
-        </Link>
-      </h1>
-
-      {user ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <span style={{ marginRight: "10px" }}>{user.name}님 반갑습니다!</span>
-          <Link to="/reservations">
-            {" "}
-            <button className="nav-button">예약 내역 확인</button>{" "}
+    <header>
+      <div className="header-content">
+        <div className="header-left">
+          <Link to="/" className="logo">
+            <span className="logo-icon">👑</span>
+            <h1>태우나라 기찬공주</h1>
           </Link>
-          <button onClick={handleLogout} className="nav-button">
-            로그아웃
-          </button>
         </div>
-      ) : (
-        <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
-          {/* 로그인 상태가 아닐 때는 버튼들만 표시 */}
+
+        <nav className="header-nav">
+          {user ? (
+            <>
+              <Link to="/" className="nav-link">홈</Link>
+              <Link to="/reservations" className="nav-link">예약 관리</Link>
+            </>
+          ) : (
+            <Link to="/" className="nav-link">홈</Link>
+          )}
+        </nav>
+
+        <div className="header-right">
+          {user ? (
+            <div className="user-menu">
+              <span className="user-name">{user.name}님</span>
+              <button onClick={handleLogout} className="btn btn-secondary btn-sm">
+                로그아웃
+              </button>
+            </div>
+          ) : (
+            <div className="auth-buttons">
+              <button onClick={() => navigate('/login')} className="btn btn-primary btn-sm">
+                로그인
+              </button>
+              <button onClick={() => navigate('/signup')} className="btn btn-secondary btn-sm">
+                회원가입
+              </button>
+            </div>
+          )}
         </div>
-      )}
-    </div>
+      </div>
+    </header>
   );
-}
+};
 
 export default Header;

@@ -45,17 +45,21 @@ export const createReservation = async (reservationData) => {
   }
 };
 
-// 예약 목록 가져오기 (사용자 ID 기반)
-export const getReservations = async (userId) => {
+// 예약 목록 가져오기 (페이지네이션, 검색 지원)
+export const getReservations = async (page = 1, searchTerm = '', userId = null) => {
   try {
     const response = await axios.get(`${API_URL}/reservations`, {
-      params: { user_id: userId }, // user_id를 쿼리 파라미터로 전달
+      params: {
+        page,
+        search: searchTerm,
+        user_id: userId,
+        limit: 10
+      }
     });
     return response;
   } catch (err) {
-    console.error(err);
-    alert(err.response ? err.response.data.message : "Error fetching reservations");
-    throw new Error("Error fetching reservations");
+    console.error('Error fetching reservations:', err);
+    throw new Error(err.response?.data?.message || '예약 목록을 불러오는데 실패했습니다.');
   }
 };
 

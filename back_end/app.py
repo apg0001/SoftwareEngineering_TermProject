@@ -60,6 +60,18 @@ def get_tables():
     } for t in tables])
 
 
+@app.route('/api/tables/<int:id>', methods=['GET'])
+def get_table(id):
+    table = Table.query.get(id)
+    if table:
+        return jsonify({
+            'id': table.id,
+            'location': table.location,
+            'capacity': table.capacity
+        })
+    return jsonify({'message': '테이블을 찾을 수 없습니다.'}), 404
+
+
 @app.route('/api/signup', methods=['POST'])
 def signup():
     data = request.get_json()
@@ -156,26 +168,57 @@ def create_reservation():
 
 @app.route('/api/reservations', methods=['GET'])
 def get_reservations():
-    user_id = request.args.get('user_id')  # 클라이언트에서 전달된 user_id 받기
-    print("user_id: ", user_id)
+    user_id = request.args.get('user_id')
+    page = int(request.args.get('page', 1))
+    limit = int(request.args.get('limit', 10))
+    search = request.args.get('search', '')
+    
+    # 기본 쿼리 생성
+    query = Reservation.query
+    
+    # 사용자 ID 필터링
     if user_id:
-        # user_id로 해당 사용자의 예약 내역만 반환
-        reservations = Reservation.query.filter_by(user_id=user_id).all()
-    else:
-        # 모든 예약 내역을 가져옴 (예시로 이렇게 처리하지만, 실제로는 보안을 고려해 이 방식은 사용하지 않음)
-        reservations = Reservation.query.all()
+        query = query.filter_by(user_id=user_id)
+    
+    # 검색어 필터링
+    if search:
+        search_term = f"%{search}%"
+        query = query.filter(
+            db.or_(
+                Reservation.name.ilike(search_term),
+                Reservation.phone.ilike(search_term),
+                Reservation.table_location.ilike(search_term)
+            )
+        )
+    
+    # 전체 레코드 수 계산
+    total_count = query.count()
+    total_pages = (total_count + limit - 1) // limit
+    
+    # 페이지네이션 적용
+    reservations = query.order_by(Reservation.reservation_time.desc())\
+        .offset((page - 1) * limit)\
+        .limit(limit)\
+        .all()
+        
+    print(reservations)
 
-    return jsonify([{
-        'id': r.id,
-        'name': r.name,
-        'phone': r.phone,
-        'credit_card': r.credit_card,
-        'guests': r.guests,
-        'table_location': r.table_location,
-        'table_capacity': r.table_capacity,
-        'reservation_time': r.reservation_time,
-        'user_id': r.user_id
-    } for r in reservations])
+    return jsonify({
+        'reservations': [{
+            'id': r.id,
+            'name': r.name,
+            'phone': r.phone,
+            'credit_card': r.credit_card,
+            'guests': r.guests,
+            'table_location': r.table_location,
+            'table_capacity': r.table_capacity,
+            'reservation_time': r.reservation_time,
+            'user_id': r.user_id
+        } for r in reservations],
+        'total_pages': total_pages,
+        'current_page': page,
+        'total_count': total_count
+    })
 
 
 @app.route('/api/cancel/<int:id>', methods=['DELETE'])
