@@ -14,13 +14,14 @@ export const loginUser = async (email, password) => {
   }
 };
 
-// 회원가입 API 호출
-export const signupUser = async (name, email, password) => {
+// 회원가입 API 호출 (formData 객체 구조 분해 방식)
+export const signupUser = async ({ name, email, password, phoneNumber }) => {
   try {
     const response = await axios.post(`${API_URL}/signup`, {
       name,
       email,
       password,
+      phone_number: phoneNumber, // phoneNumber는 서버에서 필요할 경우 전달
     });
     return response;
   } catch (err) {
