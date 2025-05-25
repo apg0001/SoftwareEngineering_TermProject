@@ -190,7 +190,7 @@ const ReservationForm = ({ user, onAddReservation }) => {
               </button>
               <button 
                 type="button" 
-                className="btn btn-secondary"
+                className="btn btn-primary"
                 onClick={() => navigate(-1)}
               >
                 취소

@@ -51,9 +51,9 @@ const LoginPage = ({ setUser }) => {
             />
           </div>
           {error && <div className="error-message">{error}</div>} {/* 로그인 실패 시 에러 메시지 */}
-          <button type="submit" className="btn btn-primary">로그인</button>
+          <button type="submit" className="btn btn-primary" style={{ color: '#6c2c55' }}> 로그인 </button>
           <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-            <a href="/signup" className="btn btn-secondary" style={{ textDecoration: 'none' }}>
+            <a href="/signup" className="btn btn-primary" style={{ textDecoration: 'none' }}>
               회원가입
             </a>
           </div>

@@ -122,7 +122,7 @@ const ReservationList = ({ user }) => {
         {totalPages > 1 && (
           <div className="pagination">
             <button 
-              className="btn btn-secondary"
+              className="btn btn-primary"
               disabled={currentPage === 1} 
               onClick={() => setCurrentPage(p => p - 1)}
             >
@@ -138,7 +138,7 @@ const ReservationList = ({ user }) => {
               </button>
             ))}
             <button 
-              className="btn btn-secondary"
+              className="btn btn-primary"
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage(p => p + 1)}
             >

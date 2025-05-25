@@ -52,8 +52,9 @@ const MainPage = ({ user }) => {
                 >
                   시작하기
                 </button>
+                
                 <button 
-                  className="btn btn-secondary"
+                  className="btn btn-primary"
                   onClick={() => navigate('/signup')}
                 >
                   회원가입

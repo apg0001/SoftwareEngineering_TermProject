@@ -96,15 +96,19 @@ const SignupPage = () => {
               required
             />
           </div>
-
-          <button type="submit" className="btn btn-primary">회원가입</button>
-          
+          <button type="submit" className="btn btn-primary" style={{ color: '#6c2c55' }}> 회원가입 </button>          
           <div style={{ textAlign: 'center', marginTop: 'var(--spacing-lg)' }}>
-            <p>이미 계정이 있으신가요?</p>
-            <a href="/login" className="btn btn-secondary" style={{ marginTop: 'var(--spacing-sm)' }}>
-              로그인하기
-            </a>
-          </div>
+  <p style={{ color: 'var(--text-light)', fontSize: '0.95rem' }}>
+    이미 계정이 있으신가요?&nbsp;
+    <a href="/login" style={{
+      color: '#6c2c55',
+      fontWeight: '600',
+      textDecoration: 'underline',
+    }}>
+      로그인하기
+    </a>
+  </p>
+</div>
         </form>
       </div>
     </div>

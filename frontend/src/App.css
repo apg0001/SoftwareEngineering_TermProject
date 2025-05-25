@@ -5,7 +5,7 @@
   --primary-dark: #e4b8ee;          /* 포인트용 – 밝은 라벤더 */
   --secondary-color: #fcd1e3;       /* 강조 버튼/링크용 – 밝은 장미 핑크 */
   --accent-color: #fffafd;          /* 카드 내부 강조 배경 – 완전한 흰색에 가까운 연핑크 */
-  --background-light: #fff8fd;      /* 카드나 컨텐츠 배경 */
+  --background-light:rgb(247, 233, 243);      /* 카드나 컨텐츠 배경 */
   --background-dark: linear-gradient(to right, #e4b8ee, #fcd1e3); /* 더 밝은 그라데이션 */
   --text-primary: #6c2c55;          /* 본문 – 연한 자주 */
   --text-secondary: #c6789d;        /* 보조 텍스트 – 밝은 로즈핑크 */
@@ -46,7 +46,7 @@ body {
 
 /* 헤더 스타일 */
 header {
-  background-color: #ffffff;
+  background: rgb(247, 233, 243); /* 이 라인 추가 또는 수정 */
   box-shadow: var(--shadow-sm);
   position: fixed;
   top: 0;
@@ -163,15 +163,18 @@ header {
   font-size: 1rem;
 }
 
+
 .btn-primary {
-  background: var(--primary-color);
-  color: var(--text-light);
+  background: var(--primary-color);   /* 밝은 연핑크 그대로 유지 */
+  color: var(--text-primary);         /* 진한 자주색 (#6c2c55)로 텍스트 강조 */
 }
 
 .btn-primary:hover {
-  background: var(--primary-dark);
+  background: var(--primary-dark);    /* 호버 색상 유지 */
+  color: white;                       /* 호버 시 흰색 텍스트로 반전 효과 */
   transform: translateY(-1px);
 }
+
 
 .btn-secondary {
   background: transparent;
@@ -195,7 +198,7 @@ header {
 }
 
 .card {
-  background: var(--text-light);
+  background: linear-gradient(to right, #e4b8ee, #fcd1e3);
   border-radius: var(--radius-md);
   padding: var(--spacing-lg);
   margin-bottom: var(--spacing-lg);
@@ -244,11 +247,11 @@ header {
 
 /* 에러 메시지 */
 .error-message {
-  color: var(--accent-color);
+  color: #6c2c55;
   text-align: center;
   margin-bottom: var(--spacing-md);
   padding: var(--spacing-sm);
-  background: #fde8e8;
+  background: linear-gradient(to right, #fcd1e3, #e4b8ee);
   border-radius: var(--radius-sm);
   font-size: 0.875rem;
 }
@@ -308,7 +311,7 @@ header {
 .table-container {
   width: 100%;
   overflow-x: auto;
-  background: var(--text-light);
+  background: #fffafd; /* 완전한 흰색에 가까운 연핑크 */
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   margin: var(--spacing-lg) 0;
@@ -321,8 +324,8 @@ table {
 }
 
 thead {
-  background-color: var(--primary-color);
-  color: var(--text-light);
+  background: linear-gradient(to right, #e4b8ee, #fcd1e3); /* 부드러운 그라데이션 */
+  color: #6c2c55; /* 자주색 텍스트 */
 }
 
 th {
@@ -332,11 +335,15 @@ th {
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  background: inherit;
+  border-bottom: 2px solid #f5cce6;
 }
 
 td {
   padding: var(--spacing-md);
-  border-bottom: 1px solid var(--border-color);
+  background-color: #fff8fd; /* 연핑크 배경 */
+  color: #6c2c55; /* 자주 텍스트 */
+  border-bottom: 1px solid #f3d9e8;
   font-size: 0.95rem;
 }
 
@@ -345,8 +352,9 @@ tbody tr {
 }
 
 tbody tr:hover {
-  background-color: rgba(52, 152, 219, 0.05);
+  background-color: #fde6f4; /* 연보라 핑크 hover */
 }
+
 
 /* 상태 배지 */
 .badge {
@@ -721,13 +729,13 @@ button:disabled {
 .table-selected {
   border-color: var(--primary-color);
   background: var(--primary-color) !important;
-  color: white !important;
+  color: #6c2c55 !important;
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
 .table-selected * {
-  color: white !important;
+  color: #6c2c55 !important;
 }
 
 .table-occupied {
@@ -836,7 +844,9 @@ textarea:focus {
   max-width: 1200px;
   margin: 0 auto;
   padding: var(--spacing-lg);
+  padding-top: 120px; /* ✅ 헤더가 fixed니까 폼이 덮이지 않도록 여백 추가 */
 }
+
 
 .reservation-form-container .card {
   margin-top: var(--spacing-xl);
@@ -847,7 +857,7 @@ textarea:focus {
 }
 
 .reservation-form-container input[readonly] {
-  background-color: var(--text-light);
+  background-color: #fceefc;
   border: 2px solid var(--border-color);
   color: var(--text-secondary);
   cursor: not-allowed;
@@ -967,10 +977,22 @@ textarea:focus {
   gap: var(--spacing-xs);
 }
 
+/* 테이블 정보 안의 텍스트 색상 */
 .table-info span {
-  display: block;
-  font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: #6c2c55;
+  font-weight: 500;
+}
+
+/* 액션 버튼 텍스트 색상 */
+.action-buttons .btn-icon {
+  color: #6c2c55;
+  border: 1px solid #e4b8ee;
+  background-color: #fff8fd;
+}
+
+.action-buttons .btn-icon:hover {
+  background-color: #fcd1e3;
+  color: white;
 }
 
 /* 다크 모드 */

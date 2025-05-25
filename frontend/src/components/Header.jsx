@@ -29,7 +29,7 @@ const Header = ({ user, handleLogout }) => {
           {user ? (
             <div className="user-menu">
               <span className="user-name">{user.name}님</span>
-              <button onClick={handleLogout} className="btn btn-secondary btn-sm">
+              <button onClick={handleLogout} className="btn btn-primary btn-sm">
                 로그아웃
               </button>
             </div>
@@ -38,7 +38,7 @@ const Header = ({ user, handleLogout }) => {
               <button onClick={() => navigate('/login')} className="btn btn-primary btn-sm">
                 로그인
               </button>
-              <button onClick={() => navigate('/signup')} className="btn btn-secondary btn-sm">
+              <button onClick={() => navigate('/signup')} className="btn btn-primary btn-sm">
                 회원가입
               </button>
             </div>
