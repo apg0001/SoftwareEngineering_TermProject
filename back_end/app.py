@@ -225,9 +225,17 @@ def get_reservations():
 def cancel_reservation(id):
     reservation = Reservation.query.get(id)
     if reservation:
+        now = datetime.now()
+        reservation_datetime = datetime.strptime(reservation.reservation_time, '%Y-%m-%dT%H:%M')
+
+        # 예약 시간 하루 전까지만 취소 가능
+        if reservation_datetime <= now + timedelta(days=1):
+            return jsonify({'message': '예약은 최소 하루 전에 취소해야 합니다.'}), 400
+
         db.session.delete(reservation)
         db.session.commit()
         return jsonify({'message': 'Reservation canceled'}), 200
+
     return jsonify({'message': 'Reservation not found'}), 404
 
 

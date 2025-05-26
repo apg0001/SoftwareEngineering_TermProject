@@ -38,6 +38,7 @@ export const createReservation = async (reservationData) => {
       `${API_URL}/reservations`,
       reservationData
     );
+    // alert(response ? response.data.message : "Error adding reservation");
     return response; // 성공 시 응답 반환
   } catch (err) {
     console.error("Error adding reservation", err);
