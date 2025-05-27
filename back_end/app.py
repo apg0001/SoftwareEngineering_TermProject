@@ -230,7 +230,7 @@ def cancel_reservation(id):
 
         # 예약 시간 하루 전까지만 취소 가능
         if reservation_datetime <= now + timedelta(days=1):
-            return jsonify({'message': '예약은 최소 하루 전에 취소해야 합니다.'}), 400
+            return jsonify({'message': '예약 당일은 취소가 불가능합니다.'}), 400
 
         db.session.delete(reservation)
         db.session.commit()
