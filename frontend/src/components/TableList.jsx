@@ -11,11 +11,7 @@ const TableList = ({ onTableSelect }) => {
     const fetchTables = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:5000/api/tables');
-        const tablesWithStatus = response.data.map(table => ({
-          ...table,
-          status: 'available'
-        }));
-        setTables(tablesWithStatus);
+        setTables(response.data);
         setLoading(false);
       } catch (err) {
         console.error(err);
@@ -28,17 +24,12 @@ const TableList = ({ onTableSelect }) => {
   }, []);
 
   const handleTableClick = (table) => {
-    if (table.status === 'available') {
-      setSelectedTableId(table.id);
-      onTableSelect(table);
-    }
+    setSelectedTableId(table.id);
+    onTableSelect(table);
   };
 
-  const getTableStatusClass = (table) => {
-    if (table.id === selectedTableId) {
-      return 'table-selected';
-    }
-    return table.status === 'available' ? 'table-available' : 'table-occupied';
+  const getTableClass = (table) => {
+    return table.id === selectedTableId ? 'table-item table-selected' : 'table-item';
   };
 
   if (loading) {
@@ -75,7 +66,7 @@ const TableList = ({ onTableSelect }) => {
           {tables.map((table) => (
             <div
               key={table.id}
-              className={`table-item ${getTableStatusClass(table)}`}
+              className={getTableClass(table)}
               onClick={() => handleTableClick(table)}
             >
               <div className="table-number">{table.id}번</div>
@@ -83,20 +74,6 @@ const TableList = ({ onTableSelect }) => {
               <div className="table-capacity">{table.capacity}인석</div>
             </div>
           ))}
-        </div>
-        <div className="table-legend">
-          <div className="legend-item">
-            <span className="legend-color table-available"></span>
-            <span>이용 가능</span>
-          </div>
-          <div className="legend-item">
-            <span className="legend-color table-occupied"></span>
-            <span>이용 중</span>
-          </div>
-          <div className="legend-item">
-            <span className="legend-color table-selected"></span>
-            <span>선택됨</span>
-          </div>
         </div>
       </div>
     </div>

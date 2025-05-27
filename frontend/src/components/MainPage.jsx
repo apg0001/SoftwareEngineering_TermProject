@@ -11,11 +11,6 @@ const MainPage = ({ user }) => {
       description: '원하는 날짜와 시간에 맞춰 쉽고 빠르게 예약하세요.'
     },
     {
-      icon: '🪑',
-      title: '실시간 좌석 확인',
-      description: '실시간으로 좌석 현황을 확인하고 선택할 수 있습니다.'
-    },
-    {
       icon: '📱',
       title: '예약 관리',
       description: '내 예약 현황을 한눈에 확인하고 관리할 수 있습니다.'
@@ -46,17 +41,10 @@ const MainPage = ({ user }) => {
             <p>특별한 순간을 위한 최고의 선택</p>
             {!user && (
               <div className="hero-buttons">
-                <button 
-                  className="btn btn-primary"
-                  onClick={() => navigate('/login')}
-                >
+                <button className="btn btn-primary" onClick={() => navigate('/login')}>
                   시작하기
                 </button>
-                
-                <button 
-                  className="btn btn-primary"
-                  onClick={() => navigate('/signup')}
-                >
+                <button className="btn btn-primary" onClick={() => navigate('/signup')}>
                   회원가입
                 </button>
               </div>
@@ -69,7 +57,7 @@ const MainPage = ({ user }) => {
             <h2 className="section-title">빠른 메뉴</h2>
             <div className="quick-menu-cards">
               {quickMenus.map((menu, index) => (
-                <div 
+                <div
                   key={index}
                   className="quick-menu-card"
                   onClick={() => navigate(menu.link)}
@@ -85,10 +73,28 @@ const MainPage = ({ user }) => {
 
         <section className="features">
           <h2 className="section-title">서비스 특징</h2>
-          <div className="feature-grid">
+          <div className="feature-grid" style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '2rem',
+            flexWrap: 'wrap',
+            maxWidth: '1000px',
+            margin: '0 auto'
+          }}>
             {features.map((feature, index) => (
-              <div key={index} className="feature-card">
-                <span className="feature-icon">{feature.icon}</span>
+              <div
+                key={index}
+                className="feature-card"
+                style={{
+                  flex: '0 1 300px',
+                  background: 'var(--background-dark)',
+                  borderRadius: 'var(--radius-md)',
+                  padding: 'var(--spacing-lg)',
+                  textAlign: 'center',
+                  boxShadow: 'var(--shadow-md)'
+                }}
+              >
+                <span className="feature-icon" style={{ fontSize: '2rem' }}>{feature.icon}</span>
                 <h3>{feature.title}</h3>
                 <p>{feature.description}</p>
               </div>
@@ -120,4 +126,4 @@ const MainPage = ({ user }) => {
   );
 };
 
-export default MainPage; 
+export default MainPage;

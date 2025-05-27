@@ -1171,23 +1171,33 @@ textarea:focus {
 }
 
 .features {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-lg) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+
 .feature-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-md);
+  display: flex;
+  justify-content: center;       /* ✅ 가운데 정렬 */
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .feature-card {
-  padding: var(--spacing-md);
-  height: auto;
-  min-height: 200px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex: 0 1 300px;                /* ✅ 최소 300px, 필요 시 줄바꿈 */
+  background: var(--background-dark);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  text-align: center;
+  box-shadow: var(--shadow-md);
 }
+
 
 .feature-icon {
   font-size: 2.5rem;

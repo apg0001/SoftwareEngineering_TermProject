@@ -34,18 +34,15 @@ export const signupUser = async ({ name, email, password, phoneNumber }) => {
 // 예약 추가 API 호출
 export const createReservation = async (reservationData) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/reservations`,
-      reservationData
-    );
-    // alert(response ? response.data.message : "Error adding reservation");
-    return response; // 성공 시 응답 반환
+    const response = await axios.post(`${API_URL}/reservations`, reservationData);
+    console.log("✅ 예약 요청 성공:", response);  // ✅ 추가
+    return response;
   } catch (err) {
-    console.error("Error adding reservation", err);
-    alert(err.response ? err.response.data.message : "Error adding reservation");
-    throw err; // 실패 시 에러 던지기
+    console.error("❌ 예약 요청 실패:", err);  // ✅ 추가
+    throw err;
   }
 };
+
 
 // 예약 목록 가져오기 (페이지네이션, 검색 지원)
 export const getReservations = async (page = 1, searchTerm = '', userId = null) => {

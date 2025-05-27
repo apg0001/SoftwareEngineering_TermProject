@@ -28,15 +28,18 @@ function App() {
   }, [user]);
 
   // 예약 추가
-  const handleAddReservation = async (reservationData) => {
-    try {
-      await createReservation(reservationData);
-      setError(null);
-    } catch (err) {
-      setError("예약 생성 중 오류가 발생했습니다.");
-      console.error(err);
-    }
-  };
+const handleAddReservation = async (reservationData) => {
+  try {
+    const response = await createReservation(reservationData); // ✅ 추가
+    setError(null);
+    return response; // ✅ 이 줄이 핵심!
+  } catch (err) {
+    setError("예약 생성 중 오류가 발생했습니다.");
+    console.error(err);
+    throw err; // ❗️catch한 오류도 다시 던져줘야 ReservationForm에서 감지 가능
+  }
+};
+
 
   // 예약 취소
   const handleCancelReservation = async (id) => {
