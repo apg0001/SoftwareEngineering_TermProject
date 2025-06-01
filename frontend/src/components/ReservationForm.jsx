@@ -17,51 +17,60 @@ const ReservationForm = ({ user, onAddReservation }) => {
   const [error, setError] = useState(null);
   const [selectedTable, setSelectedTable] = useState(null);
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  // ✅ 오늘과 한 달 후 날짜 계산
+  const today = new Date().toISOString().split('T')[0];
+  const maxDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
-  if (!user?.id) {
-    setError('로그인이 필요합니다.');
-    return;
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  if (!selectedTable?.id) {
-    setError('테이블을 선택해주세요.');
-    return;
-  }
-
-  try {
-    const reservationTime = `${formData.date}T${formData.time}`;
-    const response = await onAddReservation({
-      ...formData,
-      user_id: user.id,
-      reservation_time: reservationTime,
-      table_location: selectedTable.location,
-      table_capacity: selectedTable.capacity,
-      table_id: selectedTable.id,
-      guests: parseInt(formData.people, 10)
-    });
-
-    console.log('예약 응답:', response);
-
-    if (response?.status === 201) {
-      navigate('/reservations');
-    } else {
-      setError(response?.data?.message || '예약 실패');
+    if (!user?.id) {
+      setError('로그인이 필요합니다.');
+      return;
     }
-  } catch (err) {
-    console.error('예약 에러:', err);
 
-    const status = err.response?.status;
-    const message = err.response?.data?.message;
+    if (!selectedTable?.id) {
+      setError('테이블을 선택해주세요.');
+      return;
+    }
 
-    // ❗️오직 실패한 경우만 에러 메시지 보여주기
-    if (!status || status < 200 || status >= 300) {
+    try {
+      const reservationTime = `${formData.date}T${formData.time}`;
+      const response = await onAddReservation({
+        ...formData,
+        user_id: user.id,
+        reservation_time: reservationTime,
+        table_location: selectedTable.location,
+        table_capacity: selectedTable.capacity,
+        table_id: selectedTable.id,
+        guests: parseInt(formData.people, 10)
+      });
+
+      const message = response?.data?.message;
+
+      if (response?.status === 201) {
+        alert('예약이 완료되었습니다.');
+        navigate('/reservations');
+      } else if (message?.includes('이미 예약된 테이블')) {
+        alert('이미 예약된 좌석입니다. 다른 좌석을 선택해주세요.');
+        setError(message);
+      } else {
+        alert(message || '예약 실패');
+        setError(message || '예약 실패');
+      }
+    } catch (err) {
+      console.error('예약 에러:', err);
+      const message = err.response?.data?.message;
+
+      if (message?.includes('이미 예약된 테이블')) {
+        alert('이미 예약된 좌석입니다. 다른 좌석을 선택해주세요.');
+      } else {
+        alert('이미 예약된 좌석입니다. 다른 좌석을 선택해주세요.');
+      }
+
       setError(message || '예약 생성 중 오류가 발생했습니다.');
     }
-  }
-};
-
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -71,16 +80,12 @@ const handleSubmit = async (e) => {
     }));
   };
 
-  const handleTableSelect = async (table) => {
-    try {
-      setSelectedTable(table);
-      setFormData(prev => ({
-        ...prev,
-        tableLocation: `${table.location} ${table.id}번`
-      }));
-    } catch (err) {
-      console.error('테이블 정보를 가져오는데 실패했습니다:', err);
-    }
+  const handleTableSelect = (table) => {
+    setSelectedTable(table);
+    setFormData(prev => ({
+      ...prev,
+      tableLocation: `${table.location} ${table.id}번`
+    }));
   };
 
   return (
@@ -110,7 +115,16 @@ const handleSubmit = async (e) => {
 
             <div className="form-group">
               <label htmlFor="date">날짜</label>
-              <input type="date" id="date" name="date" value={formData.date} onChange={handleChange} required min={new Date().toISOString().split('T')[0]} />
+              <input
+                type="date"
+                id="date"
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
+                required
+                min={today}          // ✅ 오늘 이후
+                max={maxDate}        // ✅ 한 달 이내만 선택 가능
+              />
             </div>
 
             <div className="form-group">
@@ -135,12 +149,27 @@ const handleSubmit = async (e) => {
 
             <div className="form-group">
               <label htmlFor="tableLocation">테이블 위치</label>
-              <input type="text" id="tableLocation" name="tableLocation" value={formData.tableLocation} readOnly required placeholder="위의 테이블 배치도에서 테이블을 선택해주세요" />
+              <input
+                type="text"
+                id="tableLocation"
+                name="tableLocation"
+                value={formData.tableLocation}
+                readOnly
+                required
+                placeholder="위의 테이블 배치도에서 테이블을 선택해주세요"
+              />
             </div>
 
             <div className="form-group">
               <label htmlFor="specialRequests">특별 요청사항</label>
-              <textarea id="specialRequests" name="specialRequests" value={formData.specialRequests} onChange={handleChange} rows="3" placeholder="특별한 요청사항이 있다면 입력해주세요" />
+              <textarea
+                id="specialRequests"
+                name="specialRequests"
+                value={formData.specialRequests}
+                onChange={handleChange}
+                rows="3"
+                placeholder="특별한 요청사항이 있다면 입력해주세요"
+              />
             </div>
 
             <div className="form-actions">
