@@ -9,25 +9,23 @@ export const loginUser = async (email, password) => {
     return response;
   } catch (err) {
     console.error(err);
-    alert(err.response ? err.response.data.message : "Login failed");
-    throw new Error("Login failed");
+    throw new Error(err.response?.data?.message || "로그인에 실패했습니다.");
   }
 };
 
-// 회원가입 API 호출 (formData 객체 구조 분해 방식)
+// 회원가입 API 호출
 export const signupUser = async ({ name, email, password, phoneNumber }) => {
   try {
     const response = await axios.post(`${API_URL}/signup`, {
       name,
       email,
       password,
-      phone_number: phoneNumber, // phoneNumber는 서버에서 필요할 경우 전달
+      phone_number: phoneNumber,
     });
     return response;
   } catch (err) {
     console.error(err);
-    alert(err.response ? err.response.data.message : "Signup failed");
-    throw new Error("Signup failed");
+    throw new Error(err.response?.data?.message || "회원가입에 실패했습니다.");
   }
 };
 
@@ -35,16 +33,15 @@ export const signupUser = async ({ name, email, password, phoneNumber }) => {
 export const createReservation = async (reservationData) => {
   try {
     const response = await axios.post(`${API_URL}/reservations`, reservationData);
-    console.log("✅ 예약 요청 성공:", response);  // ✅ 추가
+    console.log("✅ 예약 요청 성공:", response);
     return response;
   } catch (err) {
-    console.error("❌ 예약 요청 실패:", err);  // ✅ 추가
-    throw err;
+    console.error("❌ 예약 요청 실패:", err);
+    throw new Error(err.response?.data?.message || "예약 요청에 실패했습니다.");
   }
 };
 
-
-// 예약 목록 가져오기 (페이지네이션, 검색 지원)
+// 예약 목록 가져오기
 export const getReservations = async (page = 1, searchTerm = '', userId = null) => {
   try {
     const response = await axios.get(`${API_URL}/reservations`, {
@@ -57,7 +54,7 @@ export const getReservations = async (page = 1, searchTerm = '', userId = null) 
     });
     return response;
   } catch (err) {
-    console.error('Error fetching reservations:', err);
+    console.error('예약 목록 조회 오류:', err);
     throw new Error(err.response?.data?.message || '예약 목록을 불러오는데 실패했습니다.');
   }
 };
@@ -69,7 +66,6 @@ export const cancelReservation = async (id) => {
     return response;
   } catch (err) {
     console.error(err);
-    alert(err.response ? err.response.data.message : "Canceling reservation failed");
-    throw new Error("Canceling reservation failed");
+    throw new Error(err.response?.data?.message || "예약 취소에 실패했습니다.");
   }
 };

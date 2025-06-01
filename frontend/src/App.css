@@ -1593,4 +1593,5 @@ textarea:focus {
   .auth-container {
     padding-bottom: calc(var(--spacing-xl) * 2.5);
   }
+  
 }

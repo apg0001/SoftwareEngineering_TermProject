@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signupUser } from '../services/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // ✨ 알림창 스타일
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ const SignupPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (formData.password !== formData.confirmPassword) {
       setError('비밀번호가 일치하지 않습니다.');
       return;
@@ -23,7 +25,12 @@ const SignupPage = () => {
 
     try {
       await signupUser(formData);
-      navigate('/login');
+      setError(null);
+      toast.success('🎉 회원가입이 완료되었습니다!', {
+        position: 'top-center',
+        autoClose: 2000,
+        onClose: () => navigate('/login')
+      });
     } catch (err) {
       setError('회원가입 중 오류가 발생했습니다.');
       console.error(err);
@@ -35,7 +42,7 @@ const SignupPage = () => {
       <div className="auth-container">
         <h2>회원가입</h2>
         {error && <div className="alert alert-error">{error}</div>}
-        
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="email">이메일</label>
@@ -96,21 +103,28 @@ const SignupPage = () => {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary" style={{ color: '#6c2c55' }}> 회원가입 </button>          
+
+          <button type="submit" className="btn btn-primary" style={{ color: '#6c2c55' }}>
+            회원가입
+          </button>
+
           <div style={{ textAlign: 'center', marginTop: 'var(--spacing-lg)' }}>
-  <p style={{ color: 'var(--text-light)', fontSize: '0.95rem' }}>
-    이미 계정이 있으신가요?&nbsp;
-    <a href="/login" style={{
-      color: '#6c2c55',
-      fontWeight: '600',
-      textDecoration: 'underline',
-    }}>
-      로그인하기
-    </a>
-  </p>
-</div>
+            <p style={{ color: 'var(--text-light)', fontSize: '0.95rem' }}>
+              이미 계정이 있으신가요?&nbsp;
+              <a href="/login" style={{
+                color: '#6c2c55',
+                fontWeight: '600',
+                textDecoration: 'underline',
+              }}>
+                로그인하기
+              </a>
+            </p>
+          </div>
         </form>
       </div>
+
+      {/* ✨ 토스트 알림 위치 */}
+      <ToastContainer />
     </div>
   );
 };
