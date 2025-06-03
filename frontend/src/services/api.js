@@ -60,9 +60,11 @@ export const getReservations = async (page = 1, searchTerm = '', userId = null) 
 };
 
 // 예약 취소 API 호출
-export const cancelReservation = async (id) => {
+export const cancelReservation = async (id, userId = null) => {
   try {
-    const response = await axios.delete(`${API_URL}/cancel/${id}`);
+    const response = await axios.delete(`${API_URL}/cancel/${id}`, {
+      params: { user_id: userId }
+    });
     return response;
   } catch (err) {
     console.error(err);

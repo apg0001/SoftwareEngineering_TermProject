@@ -11,7 +11,16 @@ CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///restaurant.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
+# 잘못 추가된 테이블 정보 삭제More actions
 
+
+def delete_invalid_tables():
+    invalid_tables = Table.query.all()  # 모든 테이블 정보 조회
+    for table in invalid_tables:
+        db.session.delete(table)  # 테이블 삭제
+    db.session.commit()  # 삭제된 내용 커밋
+    
+    
 # 초기 테이블 생성 함수
 def create_tables():
     tables = [
@@ -30,10 +39,13 @@ def create_tables():
     db.session.commit()
 
 # DB 초기화
+with app.app_context():
+    delete_invalid_tables()  # 잘못된 테이블 정보 삭제
 if not os.path.exists('restaurant.db'):
     with app.app_context():
         db.create_all()
         create_tables()
+
 
 # ✅ 테이블 전체 조회
 @app.route('/api/tables', methods=['GET'])
@@ -98,6 +110,7 @@ def logout():
 @app.route('/api/reservations', methods=['POST'])
 def create_reservation():
     data = request.get_json()
+    print(data)
     user_id = data.get('user_id')
     table_id = data.get('table_id')
     reservation_time_str = data.get('reservation_time')
@@ -190,11 +203,41 @@ def get_reservations():
     })
 
 # ✅ 예약 취소
+# @app.route('/api/cancel/<int:id>', methods=['DELETE'])
+# def cancel_reservation(id):
+#     reservation = Reservation.query.get(id)
+#     if not reservation:
+#         return jsonify({'message': 'Reservation not found'}), 404
+
+#     now = datetime.now()
+#     try:
+#         resv_time = reservation.reservation_time
+#         if isinstance(resv_time, str):
+#             resv_time = datetime.strptime(resv_time, '%Y-%m-%dT%H:%M')
+#     except Exception:
+#         return jsonify({'message': '예약 시간 파싱 오류'}), 500
+
+#     if resv_time.date() <= now.date():
+#         return jsonify({'message': '예약 당일은 취소가 불가능합니다.'}), 400
+
+#     db.session.delete(reservation)
+#     db.session.commit()
+#     return jsonify({'message': 'Reservation canceled'}), 200
 @app.route('/api/cancel/<int:id>', methods=['DELETE'])
 def cancel_reservation(id):
     reservation = Reservation.query.get(id)
     if not reservation:
         return jsonify({'message': 'Reservation not found'}), 404
+
+    # 클라이언트에서 전달한 user_id 받기 (쿼리 파라미터 또는 JSON body로 받도록 처리 가능)
+    user_id = request.args.get('user_id', type=int)
+    if user_id is None:
+        # 또는 request.json.get('user_id') 로도 받을 수 있음
+        return jsonify({'message': 'User ID is required'}), 400
+
+    # 예약된 user_id와 요청 user_id가 일치하는지 확인
+    if reservation.user_id != user_id:
+        return jsonify({'message': '권한이 없습니다. (User ID mismatch)'}), 403
 
     now = datetime.now()
     try:

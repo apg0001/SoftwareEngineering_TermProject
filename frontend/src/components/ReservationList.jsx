@@ -34,7 +34,7 @@ const ReservationList = ({ user }) => {
   const handleCancel = async (reservationId) => {
     if (window.confirm('예약을 취소하시겠습니까?')) {
       try {
-        await cancelReservation(reservationId);
+        await cancelReservation(reservationId, user.id);
         fetchReservations();
       } catch (err) {
         setError('예약 취소 중 오류가 발생했습니다.');
